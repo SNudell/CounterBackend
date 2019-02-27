@@ -2,6 +2,7 @@ package server.counter;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import server.counter.mongodb.MongoCounterDispenser;
 import server.errorHandling.exceptions.NoSuchCounterException;
 import server.models.requests.CreateCounterRequest;
 import server.models.requests.DecrementCounterRequest;
@@ -14,7 +15,7 @@ import java.util.Optional;
 public class CounterController {
 
     @Autowired
-    CounterDispenser dispenser;
+    MongoCounterDispenser dispenser;
 
     public CounterController () {}
 
@@ -53,7 +54,6 @@ public class CounterController {
         if (!dispenser.exists(name)) {
             throw new NoSuchCounterException(name);
         }
-        dispenser.deleteCounter(name);
+        dispenser.delete(name);
     }
-
 }
