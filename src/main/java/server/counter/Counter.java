@@ -10,8 +10,19 @@ public class Counter {
         return counter.get();
     }
 
-    public Counter (long initialValue) {
+    private String name;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Counter (long initialValue, String name) {
         counter = new AtomicLong(initialValue);
+        this.name = name;
     }
 
     public long incrementBy(long value) {
