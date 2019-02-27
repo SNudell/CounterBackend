@@ -31,10 +31,16 @@ public class CounterDispenser {
         return counter;
     }
 
-    public Counter addCounter(CreateCounterRequest request) { ;
-        Counter newCounter = new Counter(request.getValue(), request.getName());
-        counters.put(request.getName(),newCounter);
-        return newCounter;
+    public void addCounter(Counter counter) { ;
+        counters.put(counter.getName(), counter);
+    }
+
+    public void deleteCounter(String name) {
+        counters.remove(name);
+    }
+
+    public boolean exists(String name) {
+        return counters.containsKey(name);
     }
 
     public List<Counter> findAll() {

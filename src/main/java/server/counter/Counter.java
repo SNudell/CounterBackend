@@ -29,4 +29,6 @@ public class Counter {
         return counter.addAndGet(value);
     }
 
+    public long decrementBy(long value) { return counter.addAndGet(value*-1); }
+
 }
