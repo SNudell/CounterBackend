@@ -2,7 +2,6 @@ package server;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import server.counter.Counter;
 import server.counter.mongodb.MongodShutdown;
 
 import java.io.File;
@@ -10,6 +9,9 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Properties;
 
 @SpringBootApplication
 public class MainServer {
@@ -18,8 +20,13 @@ public class MainServer {
         startMongoDB();
         String hostAdress = getIPAddress();
         SpringApplication app = new SpringApplication(MainServer.class);
-        app.setDefaultProperties(Collections
-                .singletonMap("server.address", hostAdress));
+        Map<String,Object> properties = new HashMap<>();
+        properties.put("server.address", hostAdress);
+        properties.put("server.ssl.key-store", "classpath:keystore.countmeup");
+        properties.put("server.ssl.key-store-password", "sdgoD923sdingwe");
+        properties.put("server.ssl.keyStoreType", "PKCS12");
+        properties.put("server.ssl.keyAlias", "tomcat");
+        app.setDefaultProperties(properties);
         app.run(args);
     }
 
