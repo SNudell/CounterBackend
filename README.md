@@ -2,6 +2,8 @@
 
 Basic Spring web REST api that handles an arbitrary amount of counters. These are managed in a MongoDB. Requires mongodb to be installed and added to PATH.
 
+Note: I used my routers redirect to make this server accessible via the internet.
+
 ## get all counters
 get request to  /counter
 
