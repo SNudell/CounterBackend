@@ -1,7 +1,7 @@
 package server.counter.mongodb;
 
 import com.mongodb.*;
-import org.bson.BSONObject;
+
 import org.springframework.stereotype.Component;
 import server.counter.Counter;
 import server.errorHandling.exceptions.CounterAlreadyExistsException;
