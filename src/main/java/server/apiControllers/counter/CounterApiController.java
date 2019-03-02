@@ -25,7 +25,6 @@ public class CounterApiController {
 
     @GetMapping
     public List<CounterResponse> findAll() {
-        System.out.println("received Get will send all counters as response");
         List<Counter> counters = controller.findAll();
         return counters.stream().map(counter -> (new CounterResponse(counter))).collect(Collectors.toList());
     }
