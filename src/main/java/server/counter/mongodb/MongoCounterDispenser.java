@@ -4,6 +4,7 @@ import com.mongodb.*;
 import org.bson.BSONObject;
 import org.springframework.stereotype.Component;
 import server.counter.Counter;
+import server.errorHandling.exceptions.CounterAlreadyExistsException;
 import server.errorHandling.exceptions.NoSuchCounterException;
 
 import java.net.UnknownHostException;
@@ -42,7 +43,10 @@ public class MongoCounterDispenser {
         counters.insert(convertToDBObject(counter));
     }
 
-    public void addCounter(Counter counter) {
+    public void addCounter(Counter counter) throws CounterAlreadyExistsException{
+        if(exists(counter.getName())) {
+            throw new CounterAlreadyExistsException(counter.getName());
+        }
         saveCounter(counter);
     }
 

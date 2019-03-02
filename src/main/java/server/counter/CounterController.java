@@ -3,6 +3,7 @@ package server.counter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import server.counter.mongodb.MongoCounterDispenser;
+import server.errorHandling.exceptions.CounterAlreadyExistsException;
 import server.errorHandling.exceptions.NoSuchCounterException;
 import server.models.requests.CreateCounterRequest;
 import server.models.requests.DecrementCounterRequest;
@@ -19,7 +20,7 @@ public class CounterController {
 
     public CounterController () {}
 
-    public Counter addCounter(CreateCounterRequest request) { ;
+    public Counter addCounter(CreateCounterRequest request) throws CounterAlreadyExistsException { ;
         Counter newCounter = new Counter(request.getValue(), request.getName());
         dispenser.addCounter(newCounter);
         return newCounter;
@@ -57,5 +58,6 @@ public class CounterController {
             throw new NoSuchCounterException(name);
         }
         dispenser.delete(name);
+        System.out.println("deleted " + name);
     }
 }

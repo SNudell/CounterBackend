@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import server.counter.Counter;
 import server.counter.CounterController;
 import server.errorHandling.exceptions.BadRequestException;
+import server.errorHandling.exceptions.CounterAlreadyExistsException;
 import server.errorHandling.exceptions.NoSuchCounterException;
 import server.models.requests.CreateCounterRequest;
 import server.models.requests.DecrementCounterRequest;
@@ -37,8 +38,11 @@ public class CounterApiController {
     }
 
     @PostMapping
-    public CounterResponse create(@RequestBody CreateCounterRequest requestBody) throws BadRequestException {
+    public CounterResponse create(@RequestBody CreateCounterRequest requestBody) throws BadRequestException, CounterAlreadyExistsException {
         checkRequest(requestBody);
+        if (requestBody.getName().isEmpty()) {
+            throw new BadRequestException("name cannot be empty");
+        }
         Counter newCounter = controller.addCounter(requestBody);
         System.out.println("Added new Counter " + newCounter.getName());
         return new CounterResponse(newCounter);
