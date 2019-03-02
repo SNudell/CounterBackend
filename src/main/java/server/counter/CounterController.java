@@ -20,8 +20,8 @@ public class CounterController {
 
     public CounterController () {}
 
-    public Counter addCounter(CreateCounterRequest request) throws CounterAlreadyExistsException { ;
-        Counter newCounter = new Counter(request.getValue(), request.getName());
+    public Counter addCounter(String name, long initialValue) throws CounterAlreadyExistsException {
+        Counter newCounter = new Counter(initialValue, name);
         dispenser.addCounter(newCounter);
         return newCounter;
     }
@@ -39,16 +39,16 @@ public class CounterController {
         return counter;
     }
 
-    public Counter incrementCounter(IncrementCounterRequest request) throws NoSuchCounterException {
-        Counter counter = getCounter(request.getName());
-        counter.incrementBy(request.getIncrement());
+    public Counter incrementCounter(String name, long increment) throws NoSuchCounterException {
+        Counter counter = getCounter(name);
+        counter.incrementBy(increment);
         dispenser.update(counter);
         return counter;
     }
 
-    public Counter decrementCounter(DecrementCounterRequest request) throws NoSuchCounterException {
-        Counter counter = getCounter(request.getName());
-        counter.decrementBy(request.getDecrement());
+    public Counter decrementCounter(String name, long decrement) throws  NoSuchCounterException {
+        Counter counter = getCounter(name);
+        counter.decrementBy(decrement);
         dispenser.update(counter);
         return counter;
     }

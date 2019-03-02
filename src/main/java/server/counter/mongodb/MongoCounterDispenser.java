@@ -24,7 +24,6 @@ public class MongoCounterDispenser {
             Runtime.getRuntime().addShutdownHook(new Thread(new ClientShutdown(mongoClient)));
             database = mongoClient.getDB(DatabaseConstants.DATABASE_NAME);
             counters = database.getCollection(DatabaseConstants.COUNTER_COLLECTION);
-
         } catch (UnknownHostException e) {
             System.out.println("wrong database host adress");
         }
