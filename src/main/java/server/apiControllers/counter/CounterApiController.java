@@ -32,7 +32,6 @@ public class CounterApiController {
 
     @GetMapping(value = "/{name}")
     public CounterResponse findOne(@PathVariable(value = "name") String name) throws NoSuchCounterException{
-        System.out.println("received Get on \""+name+"\"");
         Counter counter = controller.getCounter(name);
         return new CounterResponse(counter);
     }
