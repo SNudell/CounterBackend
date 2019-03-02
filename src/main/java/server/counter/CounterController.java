@@ -41,12 +41,14 @@ public class CounterController {
     public Counter incrementCounter(IncrementCounterRequest request) throws NoSuchCounterException {
         Counter counter = getCounter(request.getName());
         counter.incrementBy(request.getIncrement());
+        dispenser.update(counter);
         return counter;
     }
 
     public Counter decrementCounter(DecrementCounterRequest request) throws NoSuchCounterException {
         Counter counter = getCounter(request.getName());
         counter.decrementBy(request.getDecrement());
+        dispenser.update(counter);
         return counter;
     }
 
