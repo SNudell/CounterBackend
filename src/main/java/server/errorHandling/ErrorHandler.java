@@ -17,7 +17,7 @@ public class ErrorHandler extends AbstractHandlerExceptionResolver {
             (HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
         ModelAndView modelAndView = new ModelAndView();
         try {
-            response.sendError(HttpServletResponse.SC_NOT_FOUND, ErrorMessageMapper.getMessageFor(ex));
+            response.sendError(HttpServletResponse.SC_BAD_REQUEST, ErrorMessageMapper.getMessageFor(ex));
         } catch (IOException e) {
             System.out.println("Error when writing errorResponse");
             return null;
