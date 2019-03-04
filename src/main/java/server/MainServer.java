@@ -8,15 +8,13 @@ import java.io.File;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
 
 @SpringBootApplication
 public class MainServer {
 
-    public static void main(String args[]) {
+    public static void main(String[] args) {
         startMongoDB();
         String hostAdress = getIPAddress();
         SpringApplication app = new SpringApplication(MainServer.class);
@@ -32,8 +30,14 @@ public class MainServer {
 
 
     public static void startMongoDB() {
-        new File("./data/db").mkdirs();
-        new File("./logs").mkdirs();
+        boolean dbDirCreated = new File("./data/db").mkdirs();
+        if (dbDirCreated) {
+            System.out.println("newly created database directories");
+        }
+        boolean logsCreated = new File("./logs").mkdirs();
+        if (logsCreated) {
+            System.out.println("log directory created");
+        }
         try {
             Runtime.getRuntime().exec("mongod --fork --dbpath data/db --logpath ./logs/mongodb.log");
             System.out.println("startet mongod");

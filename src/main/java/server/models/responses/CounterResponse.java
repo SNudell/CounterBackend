@@ -2,6 +2,7 @@ package server.models.responses;
 
 import server.counter.Counter;
 
+@SuppressWarnings("unused")
 public class CounterResponse {
     private long counterStatus;
     private String name;

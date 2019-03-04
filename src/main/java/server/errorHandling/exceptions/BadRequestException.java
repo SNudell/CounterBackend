@@ -1,7 +1,10 @@
 package server.errorHandling.exceptions;
 
+@SuppressWarnings("unused")
 public class BadRequestException extends Exception {
-    String cause;
+
+    private String cause;
+
     public BadRequestException(String cause) {
         this.cause = cause;
     }

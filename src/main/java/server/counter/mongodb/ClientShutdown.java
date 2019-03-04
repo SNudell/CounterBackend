@@ -4,9 +4,9 @@ import com.mongodb.MongoClient;
 
 public class ClientShutdown implements Runnable {
 
-    MongoClient client;
+    private MongoClient client;
 
-    public ClientShutdown (MongoClient client) {
+    ClientShutdown (MongoClient client) {
         this.client = client;
     }
 

@@ -13,16 +13,14 @@ import java.util.*;
 @Component
 public class MongoCounterDispenser {
 
-    MongoClient mongoClient;
-    DB database;
-    DBCollection counters;
+    private DBCollection counters;
 
     public MongoCounterDispenser() {
         try {
-            this.mongoClient = new MongoClient();
+            MongoClient mongoClient = new MongoClient();
             // this will close the client when the application terminates
             Runtime.getRuntime().addShutdownHook(new Thread(new ClientShutdown(mongoClient)));
-            database = mongoClient.getDB(DatabaseConstants.DATABASE_NAME);
+            DB database = mongoClient.getDB(DatabaseConstants.DATABASE_NAME);
             counters = database.getCollection(DatabaseConstants.COUNTER_COLLECTION);
         } catch (UnknownHostException e) {
             System.out.println("wrong database host adress");
@@ -32,13 +30,13 @@ public class MongoCounterDispenser {
     public Optional<Counter> getCounter(String name) {
         DBCursor cursor = queryFor(name);
         if (!cursor.hasNext()) {
-            return null;
+            return Optional.empty();
         }
         DBObject counter = cursor.one();
-        return Optional.ofNullable(convertToCounter(counter));
+        return Optional.of(convertToCounter(counter));
     }
 
-    public void saveCounter(Counter counter) {
+    private void saveCounter(Counter counter) {
         counters.insert(convertToDBObject(counter));
     }
 

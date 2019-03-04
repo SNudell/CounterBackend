@@ -25,10 +25,10 @@ public class Counter {
         this.name = name;
     }
 
-    public long incrementBy(long value) {
-        return counter.addAndGet(value);
+    void incrementBy(long value) {
+        counter.addAndGet(value);
     }
 
-    public long decrementBy(long value) { return counter.addAndGet(value*-1); }
+    void decrementBy(long value) { counter.addAndGet(value*-1); }
 
 }

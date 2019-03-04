@@ -5,9 +5,6 @@ import org.springframework.stereotype.Component;
 import server.counter.mongodb.MongoCounterDispenser;
 import server.errorHandling.exceptions.CounterAlreadyExistsException;
 import server.errorHandling.exceptions.NoSuchCounterException;
-import server.models.requests.CreateCounterRequest;
-import server.models.requests.DecrementCounterRequest;
-import server.models.requests.IncrementCounterRequest;
 
 import java.util.List;
 import java.util.Optional;
@@ -15,10 +12,12 @@ import java.util.Optional;
 @Component
 public class CounterController {
 
-    @Autowired
-    MongoCounterDispenser dispenser;
+    private final MongoCounterDispenser dispenser;
 
-    public CounterController () {}
+    @Autowired
+    public CounterController(MongoCounterDispenser dispenser) {
+        this.dispenser = dispenser;
+    }
 
     public Counter addCounter(String name, long initialValue) throws CounterAlreadyExistsException {
         Counter newCounter = new Counter(initialValue, name);
@@ -35,8 +34,7 @@ public class CounterController {
         if (optionalCounter.isEmpty()) {
             throw new NoSuchCounterException(name);
         }
-        Counter counter = optionalCounter.get();
-        return counter;
+        return optionalCounter.get();
     }
 
     public Counter incrementCounter(String name, long increment) throws NoSuchCounterException {

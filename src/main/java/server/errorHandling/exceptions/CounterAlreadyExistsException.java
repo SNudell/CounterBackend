@@ -2,7 +2,7 @@ package server.errorHandling.exceptions;
 
 public class CounterAlreadyExistsException extends Exception {
 
-    String name;
+    private String name;
 
     public CounterAlreadyExistsException(String name) {
         this.name = name;

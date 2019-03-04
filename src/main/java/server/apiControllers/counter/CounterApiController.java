@@ -14,7 +14,6 @@ import server.models.requests.DecrementCounterRequest;
 import server.models.requests.IncrementCounterRequest;
 import server.models.responses.CounterResponse;
 
-import java.sql.SQLOutput;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,19 +21,23 @@ import java.util.stream.Collectors;
 @RequestMapping("/counter")
 public class CounterApiController {
 
+    private final CounterController controller;
+
     @Autowired
-    CounterController controller;
+    public CounterApiController(CounterController controller) {
+        this.controller = controller;
+    }
 
     @GetMapping
     public List<CounterResponse> findAll() {
         List<Counter> counters = controller.findAll();
-        return counters.stream().map(counter -> (new CounterResponse(counter))).collect(Collectors.toList());
+        return counters.stream().map(CounterResponse::new).collect(Collectors.toList());
     }
 
     @GetMapping(value = "/{name}")
     public CounterResponse findOne(@PathVariable(value = "name") String name) throws NoSuchCounterException, BadNameException {
         String trimmedName = name.trim();
-        isValidName(trimmedName);
+        throwIfNameIsInvalid(trimmedName);
         Counter counter = controller.getCounter(trimmedName);
         return new CounterResponse(counter);
     }
@@ -47,7 +50,7 @@ public class CounterApiController {
             throw new BadRequestException("name cannot be empty");
         }
         String trimmedName = requestBody.getName().trim();
-        isValidName(trimmedName);
+        throwIfNameIsInvalid(trimmedName);
         Counter newCounter = controller.addCounter(trimmedName, requestBody.getValue());
         System.out.println("Added new Counter " + newCounter.getName());
         return new CounterResponse(newCounter);
@@ -61,7 +64,7 @@ public class CounterApiController {
             throw new BadRequestException("increment must be greater then 0");
         }
         String trimmedName = requestBody.getName().trim();
-        isValidName(trimmedName);
+        throwIfNameIsInvalid(trimmedName);
         Counter counter = controller.incrementCounter(trimmedName, requestBody.getIncrement());
         return new CounterResponse(counter);
     }
@@ -74,16 +77,16 @@ public class CounterApiController {
             throw new BadRequestException("increment must be greater then 0");
         }
         String trimmedName = requestBody.getName().trim();
-        isValidName(trimmedName);
+        throwIfNameIsInvalid(trimmedName);
         Counter counter = controller.decrementCounter(trimmedName, requestBody.getDecrement());
         return new CounterResponse(counter);
     }
 
     @DeleteMapping(value = "/{name}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteCounter (@PathVariable(value = "name") String name) throws NoSuchCounterException, BadNameException {
+    public void deleteCounter(@PathVariable(value = "name") String name) throws NoSuchCounterException, BadNameException {
         String trimmedName = name.trim();
-        isValidName(trimmedName);
+        throwIfNameIsInvalid(trimmedName);
         controller.deleteCounter(name);
     }
 
@@ -94,15 +97,17 @@ public class CounterApiController {
         }
     }
 
-    private boolean isValidName(String name) throws BadNameException {
-        for (Character c: name.toCharArray()) {
-            if (Character.isLowerCase(c) || Character.isUpperCase(c) || Character.isDigit(c) || Character.isWhitespace(c)){}
-            else {
+    private void throwIfNameIsInvalid(String name) throws BadNameException {
+        for (Character c : name.toCharArray()) {
+            if (!charIsAllowed(c)) {
                 System.out.println("Received invalid name " + name);
                 throw new BadNameException();
             }
         }
-        return true;
+    }
+
+    private boolean charIsAllowed(char c) {
+       return (Character.isLowerCase(c) || Character.isUpperCase(c) || Character.isDigit(c) || Character.isWhitespace(c));
     }
 
 }
