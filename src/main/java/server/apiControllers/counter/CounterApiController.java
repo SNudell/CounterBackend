@@ -14,6 +14,7 @@ import server.models.requests.DecrementCounterRequest;
 import server.models.requests.IncrementCounterRequest;
 import server.models.responses.CounterResponse;
 
+import java.sql.SQLOutput;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -42,6 +43,7 @@ public class CounterApiController {
     public CounterResponse create(@RequestBody CreateCounterRequest requestBody) throws BadRequestException, BadNameException, CounterAlreadyExistsException {
         checkRequest(requestBody);
         if (requestBody.getName().isEmpty()) {
+            System.out.println("received empty name");
             throw new BadRequestException("name cannot be empty");
         }
         String trimmedName = requestBody.getName().trim();
@@ -55,6 +57,7 @@ public class CounterApiController {
     public CounterResponse increment(@RequestBody IncrementCounterRequest requestBody) throws BadRequestException, BadNameException, NoSuchCounterException {
         checkRequest(requestBody);
         if (requestBody.getIncrement() < 0) {
+            System.out.println("received decrement too small");
             throw new BadRequestException("increment must be greater then 0");
         }
         String trimmedName = requestBody.getName().trim();
@@ -67,6 +70,7 @@ public class CounterApiController {
     public CounterResponse decrement(@RequestBody DecrementCounterRequest requestBody) throws BadRequestException, BadNameException, NoSuchCounterException {
         checkRequest(requestBody);
         if (requestBody.getDecrement() < 0) {
+            System.out.println("received decrement too small");
             throw new BadRequestException("increment must be greater then 0");
         }
         String trimmedName = requestBody.getName().trim();
@@ -85,6 +89,7 @@ public class CounterApiController {
 
     private void checkRequest(Object request) throws BadRequestException {
         if (request == null) {
+            System.out.println("Received empty request");
             throw new BadRequestException("request body was null");
         }
     }
@@ -93,6 +98,7 @@ public class CounterApiController {
         for (Character c: name.toCharArray()) {
             if (Character.isLowerCase(c) || Character.isUpperCase(c) || Character.isDigit(c) || Character.isWhitespace(c)){}
             else {
+                System.out.println("Received invalid name " + name);
                 throw new BadNameException();
             }
         }
