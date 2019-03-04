@@ -25,7 +25,7 @@ public class MainServer {
         properties.put("server.ssl.key-store", "classpath:keystore.countmeup");
         properties.put("server.ssl.key-store-password", "sdgoD923sdingwe");
         properties.put("server.ssl.keyStoreType", "PKCS12");
-        properties.put("server.ssl.keyAlias", "tomcat");
+        properties.put("server.ssl.keyAlias", "countmeup");
         app.setDefaultProperties(properties);
         app.run(args);
     }
